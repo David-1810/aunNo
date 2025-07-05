@@ -2,8 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Una Dedicación Especial</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <title>Cuenta Regresiva</title>
   <style>
     :root {
       --lila: #D7BDE2;
@@ -18,7 +17,7 @@
 
     body {
       margin: 0;
-      padding: 20px;
+      padding: 0;
       background-color: var(--fondo);
       color: var(--texto);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -27,133 +26,87 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      padding: 20px;
       text-align: center;
+    }
+
+    .imagen-container {
+      width: 100%;
+      max-width: 250px;
+      margin-bottom: 30px;
+      border-radius: 20px;
       overflow: hidden;
+      box-shadow: 0 10px 25px rgba(187, 143, 206, 0.4);
+    }
+
+    .imagen-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
     }
 
     h1 {
-      font-family: 'Great Vibes', cursive;
       font-size: 2.5em;
       color: var(--lila-oscuro);
       margin-bottom: 20px;
     }
 
-    .pregunta, .respuesta {
-      margin-top: 20px;
-    }
-
-    button {
+    #contador {
+      font-size: 1.8em;
       background-color: var(--lila);
       color: var(--texto);
-      border: none;
-      padding: 10px 20px;
-      font-size: 1em;
-      border-radius: 10px;
-      margin: 10px;
-      cursor: pointer;
+      padding: 15px 30px;
+      border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      transition: background-color 0.3s;
+      margin-top: 10px;
+      max-width: 90%;
     }
 
-    button:hover {
-      background-color: var(--lila-oscuro);
-    }
-
-    /* Corazones flotantes */
-    .corazon {
-      position: fixed;
-      bottom: -20px;
-      font-size: 24px;
-      color: #E91E63;
-      animation: flotar 6s linear infinite;
-      opacity: 0.8;
-      pointer-events: none;
-    }
-
-    @keyframes flotar {
-      0% {
-        transform: translateY(0) scale(1);
-        opacity: 0.8;
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8em;
       }
-      100% {
-        transform: translateY(-100vh) scale(1.5);
-        opacity: 0;
+
+      #contador {
+        font-size: 1.2em;
+        padding: 12px 20px;
       }
     }
   </style>
 </head>
 <body>
 
-  <h1 id="frase-romantica">Te pienso más de lo que debería 💘</h1>
-
-  <div class="pregunta" id="pregunta">
-    <p>¿Alguna vez te han dedicado una canción?</p>
-    <button onclick="responder('si')">Sí</button>
-    <button onclick="responder('no')">No</button>
+  <div class="imagen-container">
+    <img src="img/aunNO.jpg" alt="Sorpresa de cumpleaños" />
   </div>
 
-  <div class="respuesta" id="respuesta"></div>
+  <h1>Te dije que esperaras a tu cumpleaños</h1>
 
-  <!-- Música suave -->
-  <audio id="musica" autoplay loop volume="0.05">
-    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
-    Tu navegador no soporta audio HTML5.
-  </audio>
+  <div id="contador">Cargando...</div>
 
   <script>
-    // Frases románticas ampliadas
-    const frases = [
-      "Eres la casualidad más bonita que llegó a mi vida 💖",
-      "¿Sabías que cada latido mío lleva tu nombre?",
-      "No estaba buscando a nadie... y apareciste tú 💫",
-      "Te pienso, te escribo, y te dedico todo esto 🌙",
-      "En cada latido mío, hay un pensamiento de ti 💜",
-      "Hay canciones que parecen escritas para ti 💌",
-      "Te veo hasta cuando cierro los ojos ✨",
-      "Tu risa... mi lugar favorito 🎶",
-      "Si estás leyendo esto, ya me hiciste sonreír 💗",
-      "Contigo, cada momento se vuelve mágico 💞"
-    ];
-    document.getElementById("frase-romantica").innerText = frases[Math.floor(Math.random() * frases.length)];
+    function actualizarContador() {
+      const destino = new Date("July 11, 2025 00:00:00").getTime();
+      const ahora = new Date().getTime();
+      const diferencia = destino - ahora;
 
-    function responder(opcion) {
-      const respuestaDiv = document.getElementById('respuesta');
-      const preguntaDiv = document.getElementById('pregunta');
-      preguntaDiv.style.display = 'none';
-
-      if (opcion === 'si') {
-        respuestaDiv.innerHTML = `
-          <p>Ah, con que ya te han dedicado una canción...<br>
-          Pero ninguna como la que está a punto de sonar 😌<br>
-          Porque esta, te la dedico yo, con todo mi cariño y un corazón que no deja de pensar en ti 💜</p>
-          <button onclick="window.location.href='https://qr.me-qr.com/tbumVuoM'">💌 Escuchar canción</button>
-        `;
-      } else {
-        respuestaDiv.innerHTML = `
-          <p>Entonces, déjame ser el primero en dedicarte una canción.<br>
-          Que esta melodía hable por lo que siento y por todo lo que me haces sentir 💗</p>
-          <button onclick="window.location.href='https://qr.me-qr.com/u7d60ziz'">💌 Escuchar canción</button>
-        `;
+      if (diferencia <= 0) {
+        document.getElementById("contador").innerHTML = "¡Ya es tu cumpleaños!";
+        return;
       }
+
+      const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+      const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+      document.getElementById("contador").innerHTML =
+        `${dias} días, ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
     }
 
-    // Corazones flotantes
-    function crearCorazon() {
-      const corazon = document.createElement('div');
-      corazon.classList.add('corazon');
-      corazon.innerHTML = '❤️';
-      corazon.style.left = Math.random() * 100 + 'vw';
-      corazon.style.fontSize = (16 + Math.random() * 20) + 'px';
-      document.body.appendChild(corazon);
-      setTimeout(() => corazon.remove(), 6000);
-    }
-    setInterval(crearCorazon, 500);
-
-    // Asegura volumen bajo
-    window.addEventListener("DOMContentLoaded", () => {
-      const audio = document.getElementById("musica");
-      audio.volume = 0.05;
-    });
+    setInterval(actualizarContador, 1000);
+    actualizarContador();
   </script>
 
 </body>
