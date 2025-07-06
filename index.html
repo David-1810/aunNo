@@ -192,9 +192,9 @@
 
     let mensajeFinal = "";
     if (respuesta === "Sí") {
-      mensajeFinal = "💌 Esta canción te la dedico desde lo más profundo de mi corazón. Porque te mereces todo lo bonito que pueda imaginar.";
+      mensajeFinal = "💌 Este poema te lo dedico desde lo más profundo de mi corazón. Porque te mereces todo lo bonito que pueda imaginar.";
     } else {
-      mensajeFinal = "😔 Lamento que no quieras bailar conmigo... Pero igual, esta canción va para ti, porque hasta tus 'no' me hacen sonreír 💘";
+      mensajeFinal = "😔 Lamento que no quieras bailar conmigo... Pero igual, este poema va para ti, porque hasta tus 'no' me hacen sonreír 💘";
     }
 
     escribir(mensajeFinal);
@@ -203,7 +203,7 @@
 
   function mostrarCampoTextoYBoton() {
     document.querySelector(".botones").innerHTML = `
-      <button onclick="irCancion()">Escuchar la canción 🎵</button>
+      <button onclick="irCancion()">Ver el poema 💖</button>
     `;
     document.getElementById("campoRespuesta").innerHTML = `
       <textarea id="mensajePersonal" placeholder="¿Quieres agregar algo más? 💌"></textarea>
@@ -215,7 +215,7 @@
     mensajePersonal = textarea ? textarea.value.trim() : "";
 
     const frase = document.getElementById("frase");
-    frase.innerHTML = "Gracias por tu respuesta, en unos segundos escucharás la canción... 🎵";
+    frase.innerHTML = "Gracias por tu respuesta, en unos segundos leerás algo especial... 💖";
 
     guardarRespuestaFinal(respuestaFinal, mensajePersonal);
   }
@@ -228,9 +228,28 @@
     })
     .then(() => {
       console.log("Guardado en Firebase:", respuesta, mensaje);
-      setTimeout(() => {
-        window.location.href = "https://www.youtube.com/watch?v=DCGkzsaNZHA";
-      }, 2500);
+
+      // Ocultar textarea y botones
+      document.getElementById("campoRespuesta").innerHTML = "";
+      document.querySelector(".botones").innerHTML = "";
+
+      const poema = `
+        💖 Poema para ti 💖
+        En cada mirada encuentro
+        un universo en tus ojos, sereno.
+        Con cada sonrisa tuya florezco,
+        en el jardín de lo eterno.
+        No hacen falta mil palabras,
+        solo un gesto tuyo y vuelo.
+        Porque contigo todo brilla,
+        incluso lo más pequeño.
+        Así que gracias por estar aquí,
+        por compartir esta historia conmigo.
+        Porque si de algo estoy seguro,
+        es que mi corazón... ya es tuyo 💌
+      `;
+
+      escribirPoema(poema);
     })
     .catch((error) => {
       console.error("Error al guardar en Firebase:", error);
@@ -241,6 +260,8 @@
   function escribir(texto) {
     const frase = document.getElementById("frase");
     frase.innerHTML = "";
+    frase.style.fontFamily = "'Dancing Script', cursive";
+    frase.style.fontSize = "1.5em";
     let i = 0;
     const intervalo = setInterval(() => {
       if (i < texto.length) {
@@ -250,6 +271,24 @@
         clearInterval(intervalo);
       }
     }, 35);
+  }
+
+  function escribirPoema(texto) {
+    const frase = document.getElementById("frase");
+    frase.innerHTML = "";
+    frase.style.fontFamily = "'Quicksand', sans-serif";
+    frase.style.fontSize = "1.2em";
+    frase.style.whiteSpace = "pre-wrap";
+
+    let i = 0;
+    const intervalo = setInterval(() => {
+      if (i < texto.length) {
+        frase.innerHTML += texto.charAt(i);
+        i++;
+      } else {
+        clearInterval(intervalo);
+      }
+    }, 25);
   }
 </script>
 
