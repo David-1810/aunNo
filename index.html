@@ -2,7 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Cuenta Regresiva</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuestra Historia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Quicksand&display=swap" rel="stylesheet">
   <style>
     :root {
       --lila: #D7BDE2;
@@ -11,9 +13,7 @@
       --fondo: #FDF3FF;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -22,92 +22,237 @@
       color: var(--texto);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
       text-align: center;
     }
 
-    .imagen-container {
-      width: 100%;
-      max-width: 250px;
+    #contenedor {
+      max-width: 90%;
+      padding: 20px;
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(187, 143, 206, 0.3);
+      transition: all 0.5s ease-in-out;
+    }
+
+    #frase {
+      font-size: 1.5em;
       margin-bottom: 30px;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(187, 143, 206, 0.4);
+      font-family: 'Dancing Script', cursive;
     }
 
-    .imagen-container img {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: cover;
+    .botones {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 15px;
     }
 
-    h1 {
-      font-size: 2.5em;
-      color: var(--lila-oscuro);
-      margin-bottom: 20px;
-    }
-
-    #contador {
-      font-size: 1.8em;
+    button {
       background-color: var(--lila);
       color: var(--texto);
-      padding: 15px 30px;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1em;
       border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      margin-top: 10px;
-      max-width: 90%;
+    }
+
+    button:hover {
+      background-color: var(--lila-oscuro);
+    }
+
+    textarea {
+      margin-top: 15px;
+      width: 100%;
+      max-width: 400px;
+      height: 80px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--lila-oscuro);
+      font-family: 'Quicksand', sans-serif;
+      resize: none;
+    }
+
+    .corazon {
+      position: absolute;
+      color: #F1948A;
+      font-size: 1.5rem;
+      animation: flotar 10s linear infinite;
+      opacity: 0.4;
+      z-index: 1;
+    }
+
+    @keyframes flotar {
+      0% { transform: translateY(100vh) scale(1); opacity: 0.4; }
+      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
     }
 
     @media (max-width: 600px) {
-      h1 {
-        font-size: 1.8em;
-      }
-
-      #contador {
-        font-size: 1.2em;
-        padding: 12px 20px;
-      }
+      #frase { font-size: 1.3em; }
+      button { font-size: 0.95em; padding: 10px 20px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="imagen-container">
-    <img src="img/aunNO.jpg" alt="Sorpresa de cumpleaños" />
+<!-- Corazones flotantes -->
+<script>
+  for (let i = 0; i < 20; i++) {
+    const corazon = document.createElement('div');
+    corazon.className = 'corazon';
+    corazon.style.left = Math.random() * 100 + 'vw';
+    corazon.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+    corazon.style.animationDuration = (5 + Math.random() * 10) + 's';
+    corazon.innerText = '💖';
+    document.body.appendChild(corazon);
+  }
+</script>
+
+<div id="contenedor">
+  <div id="frase">Toca para comenzar nuestra historia... 💖</div>
+  <div id="campoRespuesta"></div>
+  <div class="botones">
+    <button id="btnSiguiente" onclick="mostrarSiguiente()">Siguiente</button>
   </div>
+</div>
 
-  <h1>Te dije que esperaras a tu cumpleaños</h1>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCIsuPHYYhxQYbz5zTJZyr63xJ100shyoo",
+    authDomain: "prueba-5a28c.firebaseapp.com",
+    projectId: "prueba-5a28c",
+    storageBucket: "prueba-5a28c.firebasestorage.app",
+    messagingSenderId: "1003817153957",
+    appId: "1:1003817153957:web:aa74e747452f1fe361a44c"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
 
-  <div id="contador">Cargando...</div>
+<script>
+  const frases = [
+    "Todo empezó con un...",
+    "Hola, ¿te gustaría bailar? Para que no piensen que solo vinimos por la comida… 😅",
+    "Una pregunta que no sabía que cambiaría mi vida 💬",
+    "Con cada charla, me fui sintiendo más afortunado 🍀",
+    "Tu voz, tu risa, tu forma de ser… me fueron atrapando 💘",
+    "Y no puedo evitar pensar cuánto significas para mí 💭",
+    "Eres mi pensamiento favorito, incluso cuando intento concentrarme 😅",
+    "Si estoy sonriendo sin razón, probablemente estés tú en mi mente 💞",
+    "Desde que llegaste, todo se siente más bonito 🌷",
+    "Hay personas que iluminan días... tú iluminas hasta pensamientos 🌟",
+    "Contigo, todo es más suave, más bonito, más tú 💗",
+    "Te convertiste en mi canción favorita sin siquiera cantar 🎶",
+    "Quisiera guardar cada risa tuya en mi bolsillo 🫶",
+    "Me haces sentir que hasta los silencios pueden ser mágicos 🌌",
+    "Y aquí estoy, dedicándote este pequeño espacio solo para ti 💖",
+    "Porque cada palabra, cada gesto, cada momento contigo es un regalo 🎁",
+    "¿Qué te parece si seguimos escribiendo nuestra historia juntos? 📖",
+    "Porque cada día contigo es una nueva página llena de sorpresas y risas 🌈",
+    "Y aunque no siempre sea fácil, sé que contigo todo vale la pena 💪",
+    "Aquí estoy, esperando que este pequeño gesto te haga sonreír 😄",
+    "Porque te mereces todo lo bonito que pueda imaginar 💖",
+    "Y aunque no siempre encuentre las palabras perfectas, espero que sientas lo que quiero decirte 💌",
+    "Si alguna vez te has sentido especial, es porque lo eres para mí 🌟",
+    "¿Qué dices? ¿Seguimos bailando juntos por la vida? 💃🕺"
+  ];
 
-  <script>
-    function actualizarContador() {
-      const destino = new Date("July 11, 2025 00:00:00").getTime();
-      const ahora = new Date().getTime();
-      const diferencia = destino - ahora;
+  let indice = 0;
+  let respuestaFinal = "";
+  let mensajePersonal = "";
 
-      if (diferencia <= 0) {
-        document.getElementById("contador").innerHTML = "¡Ya es tu cumpleaños!";
-        return;
-      }
+  function mostrarSiguiente() {
+    const frase = document.getElementById("frase");
+    const contenedorBotones = document.querySelector(".botones");
+    const campoRespuesta = document.getElementById("campoRespuesta");
 
-      const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-      const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-      const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+    if (indice < frases.length - 1) {
+      escribir(frases[indice]);
+      indice++;
+    } else {
+      escribir(frases[indice]);
+      contenedorBotones.innerHTML = `
+        <button onclick="responderUnica('Sí')">Sí 💃</button>
+        <button onclick="responderUnica('No')">No 😅</button>
+      `;
+    }
+  }
 
-      document.getElementById("contador").innerHTML =
-        `${dias} días, ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
+  function responderUnica(respuesta) {
+    respuestaFinal = respuesta;
+
+    let mensajeFinal = "";
+    if (respuesta === "Sí") {
+      mensajeFinal = "💌 Esta canción te la dedico desde lo más profundo de mi corazón. Porque te mereces todo lo bonito que pueda imaginar.";
+    } else {
+      mensajeFinal = "😔 Lamento que no quieras bailar conmigo... Pero igual, esta canción va para ti, porque hasta tus 'no' me hacen sonreír 💘";
     }
 
-    setInterval(actualizarContador, 1000);
-    actualizarContador();
-  </script>
+    escribir(mensajeFinal);
+    mostrarCampoTextoYBoton();
+  }
+
+  function mostrarCampoTextoYBoton() {
+    document.querySelector(".botones").innerHTML = `
+      <button onclick="irCancion()">Escuchar la canción 🎵</button>
+    `;
+    document.getElementById("campoRespuesta").innerHTML = `
+      <textarea id="mensajePersonal" placeholder="¿Quieres agregar algo más? 💌"></textarea>
+    `;
+  }
+
+  function irCancion() {
+    const textarea = document.getElementById("mensajePersonal");
+    mensajePersonal = textarea ? textarea.value.trim() : "";
+
+    const frase = document.getElementById("frase");
+    frase.innerHTML = "Gracias por tu respuesta, en unos segundos escucharás la canción... 🎵";
+
+    guardarRespuestaFinal(respuestaFinal, mensajePersonal);
+  }
+
+  function guardarRespuestaFinal(respuesta, mensaje) {
+    db.collection("respuestasFinales").add({
+      respuesta: respuesta,
+      mensaje: mensaje,
+      fecha: new Date().toISOString()
+    })
+    .then(() => {
+      console.log("Guardado en Firebase:", respuesta, mensaje);
+      setTimeout(() => {
+        window.location.href = "https://www.youtube.com/watch?v=DCGkzsaNZHA";
+      }, 2500);
+    })
+    .catch((error) => {
+      console.error("Error al guardar en Firebase:", error);
+      document.getElementById("frase").innerHTML = "Ocurrió un error al guardar tu respuesta 😔. Inténtalo de nuevo.";
+    });
+  }
+
+  function escribir(texto) {
+    const frase = document.getElementById("frase");
+    frase.innerHTML = "";
+    let i = 0;
+    const intervalo = setInterval(() => {
+      if (i < texto.length) {
+        frase.innerHTML += texto.charAt(i);
+        i++;
+      } else {
+        clearInterval(intervalo);
+      }
+    }, 35);
+  }
+</script>
 
 </body>
 </html>
