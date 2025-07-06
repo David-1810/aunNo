@@ -222,7 +222,7 @@
   }
 
   function guardarRespuestaFinal(respuesta, mensaje) {
-    db.collection("respuestasFinales").add({
+    db.collection("res_dia2Si").add({
       respuesta: respuesta,
       mensaje: mensaje,
       fecha: new Date().toISOString()
